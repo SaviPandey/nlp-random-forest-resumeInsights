@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLP-Driven Resume Analyzer & Recommender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .resume-container {
+            background-color: ##f3f2f2; /* Cream color */
+            color: #333; /* Updated text color for better visibility */
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 0;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .logo {
+            max-width: 150px; /* Adjust size as needed */
+            margin-right: 20px; /* Space between logo and title */
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+        }
+
+        .title {
+            flex: 1;
+            text-align: center;
+        }
+
+        .title h1, h2 {
+            font-size: 24px;
+            background: linear-gradient(45deg, #FF0000, #FF7F00, #FFFF00, #7FFF00, #00FF00, #00FF7F, #00FFFF, #007FFF, #0000FF, #7F00FF, #FF00FF, #FF007F);
+            background-size: 600% 600%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow 5s ease infinite;
+            margin: 0;
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        ul li {
+            font-weight: bold;
+            color: #4CAF50; /* Green color for list items */
+        }
+
+        ul li::before {
+            content: "• ";
+            color: #ffcc00; /* Gold color for bullets */
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input[type="file"] {
+            flex: 2;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
+        input[type="submit"] {
+            flex: 1;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            input[type="file"], input[type="submit"] {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        footer {
+            background-color: #013a5c;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: auto;
+        }
+        .heart {
+            color: red;
+            font-size: 1.2em; /* Adjust size as needed */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container resume-container">
+        <div class="header">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo1.png') }}" alt="Logo">
+            </div>
+            <div class="title">
+                <h1 style="extra-bold-title">NLP-Driven Resume Analyzer & Recommender</h1>
+            </div>
+        </div>
+        <strong>
+        <p>This system supports TXT and PDF files. You can use the following features:</p>
+         </strong>
+        <ul>
+            <li>Resume Categorization</li>
+            <li>Resume Job Recommendation</li>
+            <li>Resume Parsing (Information Extraction)</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>Upload Your Resume</h2>
+        <form action="/pred" method="post" enctype="multipart/form-data">
+            <input type="file" name="resume" accept=".pdf, .txt" aria-label="Upload your resume" required>
+            <input type="submit" value="Submit" aria-label="Submit your resume for categorization">
+        </form>
+
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+
+        {% if predicted_category %}
+        <hr>
+        <p><strong>Category:</strong> {{ predicted_category }}</p>
+        <p><strong>Recommended Job:</strong> {{ recommended_job }}</p>
+
+        <hr>
+        <h2>Extracted Information</h2>
+        <p><strong>Name:</strong> {{ name }}</p>
+        <p><strong>Phone No:</strong> {{ phone }}</p>
+        <p><strong>Email:</strong> {{ email }}</p>
+
+        {% if extracted_skills %}
+        <h3>Skills</h3>
+        <ul>
+            {% for skill in extracted_skills %}
+            <li>{{ skill }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No skills found.</p>
+        {% endif %}
+
+        {% if extracted_education %}
+        <h3>Education</h3>
+        <ul>
+            {% for edu in extracted_education %}
+            <li>{{ edu }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No education found.</p>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    <footer>
+        <p class="footer-text">Made with <span class="heart">&#10084;</span> by Savinay Pandey</p>
+    </footer>
+</body>
+
+</html>

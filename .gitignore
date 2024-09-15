@@ -1,0 +1,4 @@
+# Ignore .idea and venv
+.idea/
+venv/
+DataSet/
