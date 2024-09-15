@@ -2,7 +2,7 @@ from flask import Flask, request, render_template
 from PyPDF2 import PdfReader
 import re
 import pickle
-cleanResume
+
 app = Flask(__name__)
 
 # Load models===========================================================================================================
