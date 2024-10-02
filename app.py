@@ -224,11 +224,12 @@ def extract_education_from_resume(text):
 def extract_name_from_resume(text):
     name = None
 
-    # Use regex pattern to find a potential name
-    pattern = r"(\b[A-Z][a-z]+\b)\s(\b[A-Z][a-z]+\b)"
+    # Use regex pattern to find the name after "Name :"
+    pattern = r"Name\s*:\s*([A-Z][a-zA-Z]*\s+[A-Z][a-zA-Z]*)"
     match = re.search(pattern, text)
+    
     if match:
-        name = match.group()
+        name = match.group(1)
 
     return name
 
